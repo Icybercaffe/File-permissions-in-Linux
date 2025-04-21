@@ -1,1 +1,116 @@
-sdsdfd
+# Lab Name: Linux File Permissions
+
+## Objective
+Secure file access by managing Linux file permissions using `ls -la` and `chmod`.
+
+Scenario
+In this scenario, you must examine and manage the permissions on the files in the /home/researcher2/projects directory for the researcher2 user.
+The researcher2 user is part of the research_team group.
+You must check the permissions for all files in the directory, including any hidden files, to make sure that permissions align with the authorization that should be given. When it doesn't, you must change the permissions.
+Here’s how you’ll do this task: First, you’ll check the user and group permissions for all files in the projects directory.
+Next, you’ll check whether any files have incorrect permissions and change the permissions as needed.
+Finally, you’ll check the permissions of the /home/researcher2/projects/drafts directory and modify these permissions to remove any unauthorized access.
+
+## Step 1: Check file and directory details
+In this task, you must explore the permissions of the projects directory and the files it contains. 
+The lab starts with /home/researcher2 as the current working directory.
+This is because you're changing permissions for files and directories belonging to the researcher2 user.
+Navigate to the projects directory. cd projects
+### List the contents and permissions of the projects directory.
+The permissions of the files in the projects directory are as follows
+researcher2@4ab8f1b7e2ee:~/projects$ ls -l
+
+Output is:
+total 20
+drwx--x--- 2 researcher2 research_team 4096 Apr 21 08:56 drafts
+-rw-rw-rw- 1 researcher2 research_team   46 Apr 21 08:56 project_k.txt
+-rw-r----- 1 researcher2 research_team   46 Apr 21 08:56 project_m.txt
+-rw-rw-r-- 1 researcher2 research_team   46 Apr 21 08:56 project_r.txt
+-rw-rw-r-- 1 researcher2 research_team   46 Apr 21 08:56 project_t.txt
+
+research_team owns the files in the projects directory
+
+For instance, a directory with full permissions for all owner types would be drwxrwxrwx:
+The 1st character indicates the file type. The d indicates it’s a directory. When this character is a hyphen (-), it's a regular file.
+The 2nd-4th characters indicate the read (r), write (w), and execute (x) permissions for the user. When one of these characters is a hyphen (-) instead, it indicates that this permission is not granted to the user.
+The 5th-7th characters indicate the read (r), write (w), and execute (x) permissions for the group. When one of these characters is a hyphen (-) instead, it indicates that this permission is not granted for the group.
+The 8th-10th characters indicate the read (r), write (w), and execute (x) permissions for the owner type of other.
+This owner type consists of all other users on the system apart from the user and the group.
+When one of these characters is a hyphen (-) instead, that indicates that this permission is not granted for other.
+
+### unhidden files commnad
+
+researcher2@4ab8f1b7e2ee:~/projects$ ls -la
+
+Output is:
+
+total 32
+drwxr-xr-x 3 researcher2 research_team 4096 Apr 21 08:56 .
+drwxr-xr-x 3 researcher2 research_team 4096 Apr 21 09:30 ..
+-rw--w---- 1 researcher2 research_team   46 Apr 21 08:56 .project_x.txt
+drwx--x--- 2 researcher2 research_team 4096 Apr 21 08:56 drafts
+-rw-rw-rw- 1 researcher2 research_team   46 Apr 21 08:56 project_k.txt
+-rw-r----- 1 researcher2 research_team   46 Apr 21 08:56 project_m.txt
+-rw-rw-r-- 1 researcher2 research_team   46 Apr 21 08:56 project_r.txt
+-rw-rw-r-- 1 researcher2 research_team 
+
+project_x.txt is a hidden file that exist in the projects directory.
+
+## Step 2. Change file permissions
+
+In this task, you must determine whether any files have incorrect permissions and then change the permissions as needed. This action will remove unauthorized access and strengthen security on the system.
+None of the files should allow the other users to write to files.
+for example project_k.txt grants others write permissions to change the permissions of the file identified in the previous step so that the other owners type of other don'tt have write permissions. we should use the command "chmod o-w project_k.txt"
+now we get : -rw-rw-r-- 1 researcher2 research_team   46 Apr 21 10:29 project_k.txt instead of -rw-rw-rw- 1 researcher2 research_team   46 Apr 21 08:56 project_k.txt when we use the command "ls -l"
+project_m.txt has read permission for group to remove all permissions and only keep permossions for user to read and write we use the command :"chmod 600 project_m.txt"
+
+## Step 3. Change file permissions on a hidden file
+
+In this task, you must determine if a hidden file has incorrect permissions and then change the permissions as needed. This action will further remove unauthorized access and strengthen security on the system.
+
+The file .project_x.txt is a hidden file that has been archived and should not be written to by anyone. (The user and group should still be able to read this file.)
+
+to remove permission from user and group and keep them able to read we type the command: "chmod u=r,g=r,o= .project_x.txt"
+
+
+## Step 4.Change directory permissions
+
+In this task, you must change the permissions of a directory.
+
+First, check the group permissions of the /home/researcher2/projects/drafts directory and then modify them as required. You should be in the projects directory while managing the permissions of its subdirectory drafts.
+
+Only the researcher2 user should be allowed to access the drafts directory and its contents. This means that only researcher2 should have execute privileges.
+
+From the terminal, run the following:
+
+researcher2@886e1f8a974a:~/projects$ ls -la
+total 32
+drwxr-xr-x 3 researcher2 research_team 4096 Apr 21 10:29 .
+drwxr-xr-x 3 researcher2 research_team 4096 Apr 21 11:07 ..
+-r--r----- 1 researcher2 research_team 46 Apr 21 10:29 .project_x.txt
+drwx--x--- 2 researcher2 research_team 4096 Apr 21 10:29 drafts
+-rw-rw-r-- 1 researcher2 research_team 46 Apr 21 10:29 project_k.txt
+-rw------- 1 researcher2 research_team 46 Apr 21 10:29 project_m.txt
+-rw-rw-r-- 1 researcher2 research_team 46 Apr 21 10:29 project_r.txt
+-rw-rw-r-- 1 researcher2 research_team 46 Apr 21 10:29 project_t.txt
+
+The line showing "drwx--x---" for the drafts directory indicates that the group has execute access, which should be removed.
+
+To fix this, remove the group execute permission:
+
+researcher2@886e1f8a974a:~/projects$ chmod g-x drafts
+
+Verify the result:
+
+researcher2@886e1f8a974a:~/projects$ ls -la
+total 32
+drwxr-xr-x 3 researcher2 research_team 4096 Apr 21 10:29 .
+drwxr-xr-x 3 researcher2 research_team 4096 Apr 21 11:07 ..
+-r--r----- 1 researcher2 research_team 46 Apr 21 10:29 .project_x.txt
+drwx------ 2 researcher2 research_team 4096 Apr 21 10:29 drafts
+-rw-rw-r-- 1 researcher2 research_team 46 Apr 21 10:29 project_k.txt
+-rw------- 1 researcher2 research_team 46 Apr 21 10:29 project_m.txt
+-rw-rw-r-- 1 researcher2 research_team 46 Apr 21 10:29 project_r.txt
+-rw-rw-r-- 1 researcher2 research_team 46 Apr 21 10:29 project_t.txt
+
+After the change, the drafts directory now has permissions set to drwx------, meaning only the user researcher2 can access its contents. This prevents unauthorized access by the group or other users on the system.
