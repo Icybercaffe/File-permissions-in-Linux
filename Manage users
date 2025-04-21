@@ -1,0 +1,70 @@
+## Task 1. Add a new user
+
+Step 1: Add the new user to the system: sudo useradd researcher9
+
+This creates a new user account named researcher9.
+
+Step 2: Set research_team as the user's primary group: sudo usermod -g research_team researcher9
+
+## Task 2: Assign file ownership and make researcher9 the owner of the project_r.txt file, use the chown command.
+
+
+sudo chown researcher9 /home/researcher2/projects/project_r.txt
+
+sudo: Runs the command with elevated privileges.
+
+chown researcher9: Changes the user ownership of the file to researcher9.
+
+/home/researcher2/projects/project_r.txt: Path to the file that needs ownership reassigned.
+
+After running the command, you can verify the change with:
+
+ls -l /home/researcher2/projects/project_r.txt
+The output should now show researcher9 as the file's owner instead of researcher2.
+
+## Task 3: Add the user to a secondary group, and keep their primary group as research_team while adding them to the secondary group sales_team, use the usermod command with the -a and -G options.
+
+Command: sudo usermod -a -G sales_team researcher9
+
+sudo: Runs the command with elevated privileges.
+
+usermod: Modifies the existing user account.
+
+-a: Appends the user to the new group without removing them from existing ones (must be used with -G).
+
+-G sales_team: Specifies the secondary group to add.
+
+researcher9: The username of the account you're modifying.
+
+## Task 4: Delete a User and Clean Up the Group
+This task involved safely removing the user researcher9 from the system after they left the organization. Below are the steps taken to complete this process.
+
+### Deleted the user from the system, the following command was executed:
+sudo userdel researcher9
+
+This removed the user account researcher9, but did not remove the automatically created group with the same name. The expected message appeared:
+userdel: group researcher9 not removed because it is not the primary group of user researcher9.
+
+### Removed the user’s group
+To clean up and avoid leaving unused groups in the system, the following command was used:
+
+sudo groupdel researcher9
+This removed the researcher9 group that remained after deleting the user.
+
+### (Optional – Not used in this case)
+
+If it had been necessary to remove the user and their home directory together, the following command could have been used:
+
+sudo userdel -r researcher9
+This command would have deleted the user and also permanently removed all files in their home directory.
+
+### Verification (if needed)
+
+To confirm the user and group were deleted:
+
+
+getent passwd researcher9
+getent group researcher9
+These commands return no output if the user and group no longer exist.
+
+This process ensures that both user and group records are cleanly removed from the system, which is a best practice in user account lifecycle management.
