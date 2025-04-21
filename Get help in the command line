@@ -1,0 +1,50 @@
+# In this task, I learned how to explore and understand Linux commands using built-in help tools. 
+I used the whatis command to get a short description of a command’s purpose and the man command to view detailed documentation, including options and usage examples. 
+For 
+## task1
+### whatis
+The whatis command gives a one-line summary of what a command does. It’s useful when you need a quick reminder about the purpose of a command.
+
+Example:
+whatis cat
+Outputs: cat (1) - concatenate files and print on the standard output
+
+### man
+The man command displays the full manual (help documentation) for a command, including its description, options, usage examples, and more. It’s useful when you need detailed information about how a command works.
+
+Example:
+man cat
+Opens the full documentation for the cat command. 
+Press q to exit.
+
+### apropos
+The apropos command searches the manual page descriptions for commands related to specific keywords. It's helpful when you don’t remember the exact command name, but you know what the command should do.
+
+Example:
+apropos first part file
+→ Lists commands related to those keywords, such as head, which shows the first part of a file.
+
+Using -a option:
+The -a option tells apropos to only show results that match all the given keywords (logical AND), making the search more specific.
+
+Example:
+apropos -a first part file
+→ Narrows down the list to only commands whose descriptions include all three words: "first", "part", and "file".
+
+analyst@a789581566f6:~$ apropos -a first part file
+head (1)             - output the first part of files
+analyst@a789581566f6:~$ whatis rm
+rm (1)               - remove files or directories
+analyst@a789581566f6:~$ whatis rmdir
+rmdir (1)            - remove empty directories
+rmdir (2)            - delete a directory
+
+## task2
+
+When I didn't know the exact command name, I used apropos -a with keywords to search for it. To identify which command creates a new group, I ran:
+### apropos -a create new group
+The result returned:
+groupadd (8) - create a new group
+This confirmed that groupadd is the correct command for creating a new group on the system.
+
+By using these tools, I was able to explore available commands and understand their usage without needing to memorize every command name.
